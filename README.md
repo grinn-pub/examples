@@ -7,8 +7,8 @@ device produced by [Grinn sp. z o.o.][Grinn]
 
 ### Download and extract Buildroot release, for example
 
-    wget https://buildroot.org/downloads/buildroot-2016.11.1.tar.gz
-    tar xf buildroot-2016.11.1.tar.gz
+    wget https://buildroot.org/downloads/buildroot-2017.02.tar.gz
+    tar xf buildroot-2017.02.tar.gz
 
 ### Clone this repository
 
@@ -16,7 +16,7 @@ device produced by [Grinn sp. z o.o.][Grinn]
 
 ### Configure buildroot to use customizations from this repository
 
-    cd buildroot-2016-11.1
+    cd buildroot-2017.02
     make BR2_EXTERNAL=/tmp/examples list-defconfigs
 
 where `/tmp/examples` should point to the repository cloned in the 2nd step.
