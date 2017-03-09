@@ -33,6 +33,7 @@ should see configs provided by the external customizations (like [Grinn examples
       
     External configs in "Grinn examples":
       grinn_liteboard_lcd_res_defconfig   - Build for grinn_liteboard_lcd_res
+      grinn_liteboard_telit_defconfig     - Build for grinn_liteboard_telit
 
 ### Configure build configuration, for example
 
