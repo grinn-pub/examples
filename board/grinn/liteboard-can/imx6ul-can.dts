@@ -1,0 +1,30 @@
+/*
+ * Copyright (C) 2016 Grinn sp. z o.o.
+ *
+ * These computer program listings and specifications, are the property of
+ * Grinn sp. z o.o. and shall not be reproduced or copied or used in
+ * whole or in part without written permission from Grinn sp. z o.o.
+ */
+
+#include "imx6ul-liteboard.dts"
+
+/ {
+	model = "Grinn i.MX6UL - CAN extension board";
+};
+
+&iomuxc {
+	pinctrl-names = "default";
+
+	pinctrl_flexcan1: flexcan1grp{
+		fsl,pins = <
+			MX6UL_PAD_UART3_RTS_B__FLEXCAN1_RX	0x1b020
+			MX6UL_PAD_UART3_CTS_B__FLEXCAN1_TX	0x1b020
+		>;
+	};
+};
+
+&can1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_flexcan1>;
+	status = "okay";
+};
