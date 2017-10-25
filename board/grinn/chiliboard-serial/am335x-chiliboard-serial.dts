@@ -1,0 +1,104 @@
+/*
+ * Copyright 2017 Grinn
+ *
+ * Author: Michał Oleszczyk <m.oleszczyk@grinn-global.com>
+ *
+ * This file is dual-licensed: you can use it either under the terms
+ * of the GPL or the X11 license, at your option. Note that this dual
+ * licensing only applies to this file, and not this project as a
+ * whole.
+ *
+ *  a) This file is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License
+ *     version 2 as published by the Free Software Foundation.
+ *
+ *     This file is distributed in the hope that it will be useful
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ * Or, alternatively
+ *
+ *  b) Permission is hereby granted, free of charge, to any person
+ *     obtaining a copy of this software and associated documentation
+ *     files (the "Software"), to deal in the Software without
+ *     restriction, including without limitation the rights to use
+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+ *     sell copies of the Software, and to permit persons to whom the
+ *     Software is furnished to do so, subject to the following
+ *     conditions:
+ *
+ *     The above copyright notice and this permission notice shall be
+ *     included in all copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED , WITHOUT WARRANTY OF ANY KIND
+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ *     OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#include "am335x-chiliboard.dts"
+
+/ {
+	model = "Grinn chiliboard with serials: RS232, RS485, CAN";
+};
+
+
+&am33xx_pinmux {
+
+
+	uart1_pins: uart1_pins {
+		pinctrl-single,pins = <
+			AM33XX_IOPAD(0x978, PIN_OUTPUT | MUX_MODE7)		/* uart1_ctsn.uart1_ctsn */
+			AM33XX_IOPAD(0x97c, PIN_OUTPUT | MUX_MODE7)		/* uart1_rtsn.uart1_rtsn */
+			AM33XX_IOPAD(0x980, PIN_INPUT_PULLUP | MUX_MODE0)	/* uart1_rxd.uart1_rxd */
+			AM33XX_IOPAD(0x984, PIN_OUTPUT | MUX_MODE0)		/* uart1_txd.uart1_txd */
+		>;, last chance
+	};
+
+	uart4_pins: uart4_pins {
+		pinctrl-single,pins = <
+			AM33XX_IOPAD(0x8d0, PIN_INPUT_PULLUP | MUX_MODE6)	/* lcd_data12.uart4_ctsn */
+			AM33XX_IOPAD(0x8d4, PIN_OUTPUT | MUX_MODE6)		/* lcd_data13.uart4_rtsn */
+			AM33XX_IOPAD(0x968, PIN_INPUT | MUX_MODE1)		/* uart0_ctsn.uart4_rxd */
+			AM33XX_IOPAD(0x96c, PIN_OUTPUT | MUX_MODE1)		/* uart0_rtsn.uart4_txd */
+		>;
+	};
+
+
+	dcan0_pins: dcan0_pins {
+		pinctrl-single,pins = <
+			AM33XX_IOPAD(0x920, PIN_INPUT | MUX_MODE1) 		/* gmii1_txd2.dcan0_rx */
+			AM33XX_IOPAD(0x91c, PIN_OUTPUT | MUX_MODE1) 	/* gmii1_txd3.dcan0_tx */
+		>;
+	};
+
+};
+
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>;
+	status = "okay";
+	rts-gpio = <&gpio0 13 GPIO_ACTIVE_HIGH>;
+	rs485-rts-active-high;
+	rs485-rx-during-tx;
+	rs485-rts-delay = <1 1>;
+	linux,rs485-enabled-at-boot-time;
+};
+
+&uart4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart4_pins>;
+	status = "okay";
+};
+
+&dcan0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&dcan0_pins>;
+	status = "okay";
+};
