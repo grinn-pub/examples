@@ -1,0 +1,181 @@
+/*
+ * Copyright 2017 Grinn
+ *
+ * Author: Michał Oleszczyk <m.oleszczyk@grinn-global.com>
+ *
+ * This file is dual-licensed: you can use it either under the terms
+ * of the GPL or the X11 license, at your option. Note that this dual
+ * licensing only applies to this file, and not this project as a
+ * whole.
+ *
+ *  a) This file is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License
+ *     version 2 as published by the Free Software Foundation.
+ *
+ *     This file is distributed in the hope that it will be useful
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ * Or, alternatively
+ *
+ *  b) Permission is hereby granted, free of charge, to any person
+ *     obtaining a copy of this software and associated documentation
+ *     files (the "Software"), to deal in the Software without
+ *     restriction, including without limitation the rights to use
+ *     copy, modify, merge, publish, distribute, sublicense, and/or
+ *     sell copies of the Software, and to permit persons to whom the
+ *     Software is furnished to do so, subject to the following
+ *     conditions:
+ *
+ *     The above copyright notice and this permission notice shall be
+ *     included in all copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED , WITHOUT WARRANTY OF ANY KIND
+ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
+ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ *     OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+#include "am335x-chiliboard.dts"
+
+/ {
+	model = "Grinn chiliboard with LCD and touch screen [crossed]";
+};
+
+
+/ {
+	panel {
+		compatible = "ti,tilcdc,panel";
+		status = "okay";
+		panel-info {
+			ac-bias           = <255>;
+			ac-bias-intrpt    = <0>;
+			dma-burst-sz      = <16>;
+			bpp               = <32>;
+			fdd               = <0x80>;
+			sync-edge         = <0>;
+			sync-ctrl         = <1>;
+			raster-order      = <0>;
+			fifo-th           = <0>;
+		};
+
+		display-timings {
+			/* YEEBO YB-YG800480S01A-T-A0 */
+			800x480p62 {
+				clock-frequency = <33300000>;
+				hactive = <800>;
+				vactive = <480>;
+				hfront-porch = <210>;
+				hback-porch = <46>;
+				hsync-len = <2>;
+				vback-porch = <23>;
+				vfront-porch = <22>;
+				vsync-len = <2>;
+				hsync-active = <1>;
+				vsync-active = <1>;
+			};
+		};
+	};
+};
+
+&am33xx_pinmux {
+	lcd_pins_default: lcd_pins_default {
+		pinctrl-single,pins = <
+			0x20 0x01	/* gpmc_ad8.lcd_data16, OUTPUT | MODE1 */
+			0x24 0x01	/* gpmc_ad9.lcd_data17, OUTPUT | MODE1 */
+			0x28 0x01	/* gpmc_ad10.lcd_data18, OUTPUT | MODE1 */
+			0x2c 0x01	/* gpmc_ad11.lcd_data19, OUTPUT | MODE1 */
+			0x30 0x01	/* gpmc_ad12.lcd_data20, OUTPUT | MODE1 */
+			0x34 0x01	/* gpmc_ad13.lcd_data21, OUTPUT | MODE1 */
+			0x38 0x01	/* gpmc_ad14.lcd_data22, OUTPUT | MODE1 */
+			0x3c 0x01	/* gpmc_ad15.lcd_data23, OUTPUT | MODE1 */
+			0xa0 0x00	/* lcd_data0.lcd_data0, OUTPUT | MODE0 */
+			0xa4 0x00	/* lcd_data1.lcd_data1, OUTPUT | MODE0 */
+			0xa8 0x00	/* lcd_data2.lcd_data2, OUTPUT | MODE0 */
+			0xac 0x00	/* lcd_data3.lcd_data3, OUTPUT | MODE0 */
+			0xb0 0x00	/* lcd_data4.lcd_data4, OUTPUT | MODE0 */
+			0xb4 0x00	/* lcd_data5.lcd_data5, OUTPUT | MODE0 */
+			0xb8 0x00	/* lcd_data6.lcd_data6, OUTPUT | MODE0 */
+			0xbc 0x00	/* lcd_data7.lcd_data7, OUTPUT | MODE0 */
+			0xc0 0x00	/* lcd_data8.lcd_data8, OUTPUT | MODE0 */
+			0xc4 0x00	/* lcd_data9.lcd_data9, OUTPUT | MODE0 */
+			0xc8 0x00	/* lcd_data10.lcd_data10, OUTPUT | MODE0 */
+			0xcc 0x00	/* lcd_data11.lcd_data11, OUTPUT | MODE0 */
+			0xd0 0x00	/* lcd_data12.lcd_data12, OUTPUT | MODE0 */
+			0xd4 0x00	/* lcd_data13.lcd_data13, OUTPUT | MODE0 */
+			0xd8 0x00	/* lcd_data14.lcd_data14, OUTPUT | MODE0 */
+			0xdc 0x00	/* lcd_data15.lcd_data15, OUTPUT | MODE0 */
+			0xe0 0x00	/* lcd_vsync.lcd_vsync, OUTPUT | MODE0 */
+			0xe4 0x00	/* lcd_hsync.lcd_hsync, OUTPUT | MODE0 */
+			0xe8 0x00	/* lcd_pclk.lcd_pclk, OUTPUT | MODE0 */
+			0xec 0x00	/* lcd_ac_bias_en.lcd_ac_bias_en, OUTPUT | MODE0 */
+		>;
+	};
+
+};
+
+&lcdc {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&lcd_pins_default>;
+	blue-and-red-wiring = "crossed";
+};
+
+&tscadc {
+	status = "okay";
+	tsc {
+		ti,wires = <4>;
+		ti,x-plate-resistance = <200>;
+		ti,coordinate-readouts = <5>;
+		ti,wire-config = <0x00 0x11 0x22 0x33>;
+		ti,charge-delay = <0x400>;
+	};
+
+	adc {
+		ti,adc-channels = <4 5 6 7>;
+	};
+};
+
+&tps {
+	backlight: backlight {
+		fdim = <100>; /* 100Hz,200Hz,500Hz,1000Hz */
+		isel = <1>; /* 1 - ISET1, 2 - ISET 2 */
+		default-brightness = <50>;
+	};
+};
+
+/* --------------------------------------------------------------------- */
+/* MCP23008 connected to I2C SCL and SDA and to interrupt line:
+   GPIO1_23
+*/
+&am33xx_pinmux {
+    i2c_int_pins_default: i2c_int_pins_default {
+	pinctrl-single,pins = <
+	    0x05c (PIN_INPUT_PULLUP | MUX_MODE7) /* "gpmc_a7.gpio1_23" / LCD Sandwich I2C INT */
+	>;
+    };
+
+};
+
+&i2c0 {
+ 	mcpgpio: gpio@20 {
+		compatible = "microchip,mcp23008";
+		gpio-controller;
+		#gpio-cells = <2>;
+		reg = <0x20>;
+		status = "okay";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&i2c_int_pins_default>;
+
+		/* INT connected to Chiliboard P62=GPIO1_23 */
+		interrupt-parent = <&gpio1>;
+		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-controller;
+	};
+};
