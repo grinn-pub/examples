@@ -44,7 +44,7 @@
 #include "am335x-chiliboard.dts"
 
 / {
-	model = "Grinn chiliboard with LCD and touch screen [crossed]";
+	model = "Grinn chiliboard with LCD and touch screen.";
 };
 
 
@@ -150,18 +150,9 @@
 };
 
 /* --------------------------------------------------------------------- */
-/* MCP23008 connected to I2C SCL and SDA and to interrupt line:
+/* MCP23008 connected to I2C SCL and SDA:
    GPIO1_23
 */
-&am33xx_pinmux {
-    i2c_int_pins_default: i2c_int_pins_default {
-	pinctrl-single,pins = <
-	    0x05c (PIN_INPUT_PULLUP | MUX_MODE7) /* "gpmc_a7.gpio1_23" / LCD Sandwich I2C INT */
-	>;
-    };
-
-};
-
 &i2c0 {
  	mcpgpio: gpio@20 {
 		compatible = "microchip,mcp23008";
@@ -170,12 +161,11 @@
 		reg = <0x20>;
 		status = "okay";
 
-		pinctrl-names = "default";
-		pinctrl-0 = <&i2c_int_pins_default>;
-
-		/* INT connected to Chiliboard P62=GPIO1_23 */
-		interrupt-parent = <&gpio1>;
-		interrupts = <23 IRQ_TYPE_LEVEL_LOW>;
-		interrupt-controller;
+		lcd_en {
+			gpio-hog;
+			gpios = <7 0>;
+			output-high;
+			line-name = "lcd-en";
+		};
 	};
 };
