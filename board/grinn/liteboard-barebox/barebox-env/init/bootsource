@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -n "$nv.boot.default" ]; then
+	exit
+fi
+
+if [ $bootsource = mmc ]; then
+	if [ $bootsource_instance = 0 ]; then
+		global.boot.default="sd emmc net"
+	else
+		global.boot.default="emmc sd net"
+	fi
+elif [ $bootsource = net ]; then
+	global.boot.default="net sd emmc"
+fi

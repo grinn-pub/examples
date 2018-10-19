@@ -1,0 +1,10 @@
+#!/bin/sh
+
+mkdir -p /mnt/tftp
+automount /mnt/tftp 'ifup -a && mount -t tftp $global.net.server /mnt/tftp'
+
+mkdir -p /mnt/sd
+automount -d /mnt/sd 'mmc0.probe=1 && [ -e /dev/mmc0.0 ] && mount /dev/mmc0.0 /mnt/sd'
+
+mkdir -p /mnt/emmc
+automount -d /mnt/emmc 'mmc1.probe=1 && [ -e /dev/mmc1.0 ] && mount /dev/mmc1.0 /mnt/emmc'

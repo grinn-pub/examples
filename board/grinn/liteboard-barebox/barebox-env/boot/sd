@@ -1,0 +1,5 @@
+#!/bin/sh
+
+global.bootm.image="/mnt/sd/boot/zImage"
+global.bootm.oftree="/mnt/sd/boot/imx6ul-${global.hostname}.dtb"
+global.linux.bootargs.dyn.root="root=/dev/mmcblk0p1 rootwait rw"
