@@ -1,0 +1,10 @@
+[Unit]
+Description=Reset GPS service
+Before=ttn-packet-forwarder.service
+
+[Service]
+Type=oneshot
+ExecStart=reset_gps
+
+[Install]
+WantedBy=multi-user.target

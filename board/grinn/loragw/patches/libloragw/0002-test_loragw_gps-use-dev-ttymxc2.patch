@@ -1,0 +1,25 @@
+From 9a9d5458b9c325df238706b79d2d6eab9c342894 Mon Sep 17 00:00:00 2001
+From: Piotr Haber <gluedig@gmail.com>
+Date: Wed, 26 Jul 2017 12:53:11 +0200
+Subject: [PATCH 2/2] test_loragw_gps: use /dev/ttymxc2
+
+---
+ libloragw/tst/test_loragw_gps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libloragw/tst/test_loragw_gps.c b/libloragw/tst/test_loragw_gps.c
+index a676346..31f51cf 100644
+--- a/libloragw/tst/test_loragw_gps.c
++++ b/libloragw/tst/test_loragw_gps.c
+@@ -98,7 +98,7 @@ int main()
+     printf("*** Library version information ***\n%s\n***\n", lgw_version_info());
+ 
+     /* Open and configure GPS */
+-    i = lgw_gps_enable("/dev/ttyAMA0", NULL, 0, &gps_tty_dev);
++    i = lgw_gps_enable("/dev/ttymxc2", NULL, 0, &gps_tty_dev);
+     if (i != LGW_GPS_SUCCESS) {
+         printf("ERROR: IMPOSSIBLE TO ENABLE GPS\n");
+         exit(EXIT_FAILURE);
+-- 
+2.11.0
+

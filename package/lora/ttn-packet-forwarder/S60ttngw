@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Start LoRa packet forwarder
+#
+
+case "$1" in
+  start)
+ 	printf "Starting LoRa packet forwarder: "
+	ps_cnt=$(ps | grep /ttn/poly_pkt_fwd | wc -l)
+	if [ $ps_cnt -eq 2 ]; then
+		echo "Already running"
+		exit 0
+	fi
+	/lora/reset_lgw.sh start
+	sleep 10
+	/ttn/poly_pkt_fwd > /tmp/lora.log &
+	echo "OK"
+	;;
+  stop)
+	printf "Stopping LoRa packet forwarder: "
+	killall poly_pkt_fwd
+	echo "OK"
+	;;
+  restart|reload)
+	"$0" stop
+	sleep 5
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

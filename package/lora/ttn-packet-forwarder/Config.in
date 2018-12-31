@@ -1,0 +1,5 @@
+config BR2_PACKAGE_TTN_PACKET_FORWARDER
+	depends on BR2_PACKAGE_LIBLORAGW
+	bool "ttn-packet-forwarder"
+	help
+	    TTN LoRa Packet Forwarder

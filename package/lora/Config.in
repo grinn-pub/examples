@@ -1,0 +1,4 @@
+menu "LoRa"
+    source "$BR2_EXTERNAL_GRINN_EXAMPLES_PATH/package/lora/libloragw/Config.in"
+    source "$BR2_EXTERNAL_GRINN_EXAMPLES_PATH/package/lora/ttn-packet-forwarder/Config.in"
+endmenu

@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# Enable Modem
+#
+
+if [ ! -x /sys/class/gpio/gpio43 ]; then
+	echo 43 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio43/direction
+fi
+if [ ! -x /sys/class/gpio/gpio44 ]; then
+	echo 44 > /sys/class/gpio/export
+	echo out > /sys/class/gpio/gpio44/direction
+fi
+
+case "$1" in
+  start)
+ 	printf "Enabling Modem: "
+	echo 1 > /sys/class/gpio/gpio44/value
+	echo 1 > /sys/class/gpio/gpio43/value
+	sleep 10
+	echo 0 > /sys/class/gpio/gpio43/value
+	#mknod /dev/ppp c 108 0
+	echo "OK"
+	;;
+  stop)
+	printf "Disabling Modem: "
+	echo 0 > /sys/class/gpio/gpio44/value
+	sleep 1
+	echo "OK"
+	;;
+  restart|reload)
+	"$0" stop
+	"$0" start
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+
