@@ -1,0 +1,16 @@
+[Unit]
+Description=TTN packet forwarder Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/ttn
+ExecStartPre=/lora/reset_lgw.sh start
+ExecStart=/ttn/poly_pkt_fwd
+ExecStopPost=/lora/reset_lgw.sh stop
+Restart=always
+RestartSec=20
+
+[Install]
+WantedBy=multi-user.target

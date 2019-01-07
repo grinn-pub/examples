@@ -1,0 +1,17 @@
+[Unit]
+Description=PPP daemon
+
+[Service]
+Type=simple
+
+ExecStartPre=/usr/bin/enable_modem start
+ExecStartPre=/usr/bin/sleep 15
+ExecStart=/usr/sbin/pppd file /etc/ppp/peers/provider nodetach
+
+ExecStop=-/usr/sbin/killall -9 pppd
+ExecStopPost=-/usr/bin/enable_modem stop
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

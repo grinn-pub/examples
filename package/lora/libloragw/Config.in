@@ -1,0 +1,4 @@
+config BR2_PACKAGE_LIBLORAGW
+	bool "libloragw"
+	help
+	    LoRa Gateway Library & Tools

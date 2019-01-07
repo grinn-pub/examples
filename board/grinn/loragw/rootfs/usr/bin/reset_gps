@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Reset GPS
+#
+
+if [ ! -d /sys/class/gpio/gpio0 ]; then
+    echo 0 > /sys/class/gpio/export
+fi
+echo out > /sys/class/gpio/gpio0/direction
+
+printf "Resetting GPS: "
+echo 1 > /sys/class/gpio/gpio0/value
+sleep 0.5
+echo 0 > /sys/class/gpio/gpio0/value
+chmod ugo+rw /dev/ttymxc2
+echo "OK"
+
+exit $?
